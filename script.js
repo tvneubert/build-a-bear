@@ -1,3 +1,8 @@
+// ===== IMPORTS =====
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
 // ===== CONFIGURATION =====
 const CONFIG = {
     colors: {
@@ -15,7 +20,7 @@ const CONFIG = {
         }
     },
     camera: {
-        position: { x: 0, y: 1.5, z: 4 },
+        position: { x: 0, y: 1.5, z: -4 },
         fov: 45
     },
     defaultState: {
@@ -127,7 +132,7 @@ class SceneManager {
     }
 
     setupControls() {
-        this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
+        this.controls = new OrbitControls(this.camera, this.renderer.domElement);
         this.controls.enableDamping = true;
         this.controls.dampingFactor = 0.05;
         this.controls.minDistance = 2;
@@ -162,12 +167,28 @@ class SceneManager {
     }
 
     loadModel(path, name, callback) {
-        const loader = new THREE.GLTFLoader();
+        const loader = new GLTFLoader();
         loader.load(
             path,
             (gltf) => {
                 const model = gltf.scene;
                 model.visible = false;
+                
+                // Center and scale model
+                const box = new THREE.Box3().setFromObject(model);
+                const center = box.getCenter(new THREE.Vector3());
+                const size = box.getSize(new THREE.Vector3());
+                
+                // Center model
+                model.position.x = -center.x;
+                model.position.y = -center.y;
+                model.position.z = -center.z;
+                
+                // Scale to fit (target height ~2 units)
+                const maxDim = Math.max(size.x, size.y, size.z);
+                const scale = 2 / maxDim;
+                model.scale.setScalar(scale);
+                
                 this.scene.add(model);
                 
                 // Enable shadows
@@ -200,6 +221,48 @@ class SceneManager {
         if (newBear) {
             newBear.visible = true;
             this.currentBear = newBear;
+            
+            // Reposition accessories for different bear forms
+            this.repositionAccessories(formName);
+        }
+    }
+    
+    repositionAccessories(formName) {
+        // Adjust accessory positions based on bear form
+        const positions = {
+            sitting: {
+                hat: { y: 1.7, scale: 1.0 },
+                bow: { x: 0.3, y: 1.6, scale: 0.8 },
+                scarf: { y: 1.0, scale: 1.0 }
+            },
+            standing: {
+                hat: { y: 2.0, scale: 1.0 },
+                bow: { x: 0.28, y: 1.9, scale: 0.8 },
+                scarf: { y: 1.5, scale: 1.0 }
+            },
+            compact: {
+                hat: { y: 1.4, scale: 0.9 },
+                bow: { x: 0.3, y: 1.3, scale: 0.7 },
+                scarf: { y: 0.8, scale: 0.9 }
+            }
+        };
+        
+        const pos = positions[formName];
+        if (!pos) return;
+        
+        if (this.accessories.hat) {
+            this.accessories.hat.position.y = pos.hat.y;
+            this.accessories.hat.scale.setScalar(pos.hat.scale);
+        }
+        
+        if (this.accessories.bow) {
+            this.accessories.bow.position.set(pos.bow.x, pos.bow.y, 0);
+            this.accessories.bow.scale.setScalar(pos.bow.scale);
+        }
+        
+        if (this.accessories.scarf) {
+            this.accessories.scarf.position.y = pos.scarf.y;
+            this.accessories.scarf.scale.setScalar(pos.scarf.scale);
         }
     }
 
@@ -208,8 +271,16 @@ class SceneManager {
         
         const color = new THREE.Color(CONFIG.colors.fur[colorName]);
         this.currentBear.traverse((child) => {
-            if (child.isMesh && child.name.includes('Body')) {
-                child.material.color.copy(color);
+            if (child.isMesh) {
+                // Prüfe ob das Material für Fell ist (nicht Augen/Nase)
+                if (child.material && child.material.name !== 'EyeBlack') {
+                    // Kopiere Material falls es geteilt wird
+                    if (!child.material.userData.isCloned) {
+                        child.material = child.material.clone();
+                        child.material.userData.isCloned = true;
+                    }
+                    child.material.color.copy(color);
+                }
             }
         });
     }
@@ -219,8 +290,15 @@ class SceneManager {
         
         const color = new THREE.Color(CONFIG.colors.eyes[colorName]);
         this.currentBear.traverse((child) => {
-            if (child.isMesh && child.name.includes('Eye')) {
-                child.material.color.copy(color);
+            if (child.isMesh) {
+                // Nur Meshes mit EyeBlack Material färben
+                if (child.material && child.material.name === 'EyeBlack') {
+                    if (!child.material.userData.isEyeCloned) {
+                        child.material = child.material.clone();
+                        child.material.userData.isEyeCloned = true;
+                    }
+                    child.material.color.copy(color);
+                }
             }
         });
     }
@@ -353,29 +431,44 @@ class BearConfigurator {
     }
 
     loadAssets() {
-        // Placeholder: Load models when available
-        console.log('Ready to load 3D models');
+        // Load all bear models
+        this.sceneManager.loadModel('models/bears/bear_sitting.glb', 'sitting', (model) => {
+            this.sceneManager.bearModels.sitting = model;
+            this.sceneManager.currentBear = model;
+            model.visible = true;
+            
+            // Apply default colors
+            this.sceneManager.updateFurColor(this.bearState.furColor);
+            this.sceneManager.updateEyeColor(this.bearState.eyeColor);
+        });
         
-        // TODO: Uncomment when models are ready
-        // this.sceneManager.loadModel('models/bear_sitting.glb', 'sitting', (model) => {
-        //     this.sceneManager.bearModels.sitting = model;
-        //     this.sceneManager.currentBear = model;
-        //     model.visible = true;
-        // });
+        this.sceneManager.loadModel('models/bears/bear_standing.glb', 'standing', (model) => {
+            this.sceneManager.bearModels.standing = model;
+        });
         
-        // Add placeholder cube for testing
-        this.addPlaceholder();
-    }
-
-    addPlaceholder() {
-        const geometry = new THREE.BoxGeometry(1, 1, 1);
-        const material = new THREE.MeshStandardMaterial({ color: CONFIG.colors.fur.brown });
-        const cube = new THREE.Mesh(geometry, material);
-        cube.castShadow = true;
-        this.sceneManager.scene.add(cube);
-        this.sceneManager.currentBear = cube;
+        this.sceneManager.loadModel('models/bears/bear_compact.glb', 'compact', (model) => {
+            this.sceneManager.bearModels.compact = model;
+        });
         
-        console.log('Placeholder cube added - replace with bear model');
+        // Load accessories
+        this.sceneManager.loadModel('models/accessories/hat.glb', 'hat', (model) => {
+            this.sceneManager.accessories.hat = model;
+            model.visible = false;
+            model.position.set(0, 1.7, 0);  // Position on bear's head
+        });
+        
+        this.sceneManager.loadModel('models/accessories/bow.glb', 'bow', (model) => {
+            this.sceneManager.accessories.bow = model;
+            model.visible = false;
+            model.position.set(0.3, 1.6, 0);  // Position on bear's ear
+            model.scale.set(0.8, 0.8, 0.8);
+        });
+        
+        this.sceneManager.loadModel('models/accessories/scarf.glb', 'scarf', (model) => {
+            this.sceneManager.accessories.scarf = model;
+            model.visible = false;
+            model.position.set(0, 1.0, 0);  // Position on bear's neck
+        });
     }
 }
 

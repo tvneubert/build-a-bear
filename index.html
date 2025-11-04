@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Build-A-Bear Konfigurator 🧸</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- 3D Viewer with Header -->
+            <div class="viewer-section">
+                <header class="header">
+                    <h1>🧸 Build Your Bear</h1>
+                    <p class="subtitle">Erstelle deinen eigenen Teddy!</p>
+                </header>
+                <div class="viewer-container">
+                <canvas id="canvas3d"></canvas>
+                <div class="viewer-controls">
+                    <button id="resetCamera" class="icon-btn" title="Kamera zurücksetzen">🔄</button>
+                </div>
+                </div>
+                
+                <!-- Footer -->
+                <footer class="footer">
+                    <p>THREE.js Produktkonfigurator als LAB für Visual Computing 1 an der ZHAW © 2025</p>
+                </footer>
+            </div>
+
+            <!-- Configuration Panel -->
+            <div class="config-panel">
+                <!-- Base Form Selection -->
+                <div class="config-section">
+                    <h3>Körperform</h3>
+                    <div class="option-group">
+                        <button class="option-btn active" data-form="sitting">
+                            <span class="icon">🪑</span>
+                            <span class="label">Sitzend</span>
+                        </button>
+                        <button class="option-btn" data-form="standing">
+                            <span class="icon">🧍</span>
+                            <span class="label">Stehend</span>
+                        </button>
+                        <button class="option-btn" data-form="compact">
+                            <span class="icon">⭕</span>
+                            <span class="label">Kompakt</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Fur Color -->
+                <div class="config-section">
+                    <h3>Fellfarbe</h3>
+                    <div class="color-group">
+                        <button class="color-btn active" data-color="brown" style="background-color: #8B4513;" title="Braun"></button>
+                        <button class="color-btn" data-color="beige" style="background-color: #D2B48C;" title="Beige"></button>
+                        <button class="color-btn" data-color="white" style="background-color: #F5F5DC;" title="Weiss"></button>
+                        <button class="color-btn" data-color="pink" style="background-color: #FFB6C1;" title="Rosa"></button>
+                    </div>
+                </div>
+
+                <!-- Eye Color -->
+                <div class="config-section">
+                    <h3>Augenfarbe</h3>
+                    <div class="color-group">
+                        <button class="color-btn active" data-eye="black" style="background-color: #000000;" title="Schwarz"></button>
+                        <button class="color-btn" data-eye="blue" style="background-color: #4169E1;" title="Blau"></button>
+                        <button class="color-btn" data-eye="brown" style="background-color: #654321;" title="Braun"></button>
+                        <button class="color-btn" data-eye="green" style="background-color: #228B22;" title="Grün"></button>
+                    </div>
+                </div>
+
+                <!-- Accessories -->
+                <div class="config-section">
+                    <h3>Zubehör</h3>
+                    <div class="accessory-group">
+                        <label class="accessory-item">
+                            <input type="checkbox" id="acc-hat" data-accessory="hat">
+                            <span class="accessory-label">
+                                <span class="icon">🎩</span>
+                                <span>Hut</span>
+                            </span>
+                        </label>
+                        <label class="accessory-item">
+                            <input type="checkbox" id="acc-bow" data-accessory="bow">
+                            <span class="accessory-label">
+                                <span class="icon">🎀</span>
+                                <span>Schleife</span>
+                            </span>
+                        </label>
+                        <label class="accessory-item">
+                            <input type="checkbox" id="acc-scarf" data-accessory="scarf">
+                            <span class="accessory-label">
+                                <span class="icon">🧣</span>
+                                <span>Schal</span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Reset Button -->
+                <div class="config-section">
+                    <button id="resetAll" class="reset-btn">Zurücksetzen</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Three.js -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

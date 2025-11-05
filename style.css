@@ -146,7 +146,7 @@ body {
     font-size: 1.2rem;
 }
 
-/* Bear Type Buttons (rund mit Emojis) */
+/* Bear Type Buttons */
 .bear-type-group {
     display: flex;
     gap: 15px;

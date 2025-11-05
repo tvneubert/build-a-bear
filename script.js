@@ -88,8 +88,6 @@ controls.target.set(0, 1, 0);
 const gltfLoader = new GLTFLoader();
 const textureLoader = new THREE.TextureLoader();
 
-// Models are already Y-Up, no rotation needed.
-
 // Load textures
 const textures = {};
 Object.keys(CONFIG.textures).forEach(key => {
@@ -154,7 +152,7 @@ function loadBear() {
                 
                 const name = child.name.toLowerCase();
                 
-                // Find nose first (more specific name)
+                // Find nose first
                 if (name.includes('nose')) {
                     bearParts.nose = child;
                 }
@@ -163,7 +161,6 @@ function loadBear() {
                     if (!bearParts.eyes) bearParts.eyes = [];
                     bearParts.eyes.push(child);
                 }
-                // Assume largest mesh is the body
                 else {
                     if (!bearParts.body || child.geometry.attributes.position.count > bearParts.body.geometry.attributes.position.count) {
                         bearParts.body = child;
@@ -190,8 +187,6 @@ function loadBear() {
 function loadAccessory(name, path) {
     gltfLoader.load(path, (gltf) => {
         const accessory = gltf.scene;
-        
-        // No rotation needed, using Y-Up from Blender
         
         // Set accessory position (Y is up)
         const positions = {

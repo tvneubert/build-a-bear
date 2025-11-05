@@ -6,7 +6,7 @@
     <title>Build-A-Bear Konfigurator 🧸</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body cz-shortcut-listen="true">
     <div class="container">
         <!-- Main Content -->
         <div class="main-content">
@@ -14,95 +14,111 @@
             <div class="viewer-section">
                 <header class="header">
                     <h1>🧸 Build Your Bear</h1>
-                    <p class="subtitle">Erstelle deinen eigenen Teddy!</p>
+                    <p class="subtitle">Create your own teddy bear!</p>
                 </header>
                 <div class="viewer-container">
-                <canvas id="canvas3d"></canvas>
-                <div class="viewer-controls">
-                    <button id="resetCamera" class="icon-btn" title="Kamera zurücksetzen">🔄</button>
-                </div>
+                    <canvas id="canvas3d"></canvas>
+                    <div class="viewer-controls">
+                        <button id="resetCamera" class="icon-btn" title="Reset Camera">🔄</button>
+                    </div>
                 </div>
                 
                 <!-- Footer -->
                 <footer class="footer">
-                    <p>THREE.js Produktkonfigurator als LAB für Visual Computing 1 an der ZHAW © 2025</p>
+                    <p>THREE.js Product Configurator - VC1 Lab Project ZHAW © 2025</p>
                 </footer>
             </div>
 
             <!-- Configuration Panel -->
             <div class="config-panel">
-                <!-- Base Form Selection -->
+                
+                <!-- Bear Type Selection -->
                 <div class="config-section">
-                    <h3>Körperform</h3>
-                    <div class="option-group">
-                        <button class="option-btn active" data-form="sitting">
-                            <span class="icon">🪑</span>
-                            <span class="label">Sitzend</span>
+                    <h3>Choose a Bear Type</h3>
+                    <div class="bear-type-group">
+                        <button class="bear-type-btn active" data-skin="brown" title="Brown Bear">
+                            <span class="bear-icon">🐻</span>
                         </button>
-                        <button class="option-btn" data-form="standing">
-                            <span class="icon">🧍</span>
-                            <span class="label">Stehend</span>
+                        <button class="bear-type-btn" data-skin="panda" title="Panda Bear">
+                            <span class="bear-icon">🐼</span>
                         </button>
-                        <button class="option-btn" data-form="compact">
-                            <span class="icon">⭕</span>
-                            <span class="label">Kompakt</span>
+                        <button class="bear-type-btn" data-skin="pink" title="Pink Bear">
+                            <span class="bear-icon" style="filter: hue-rotate(300deg) saturate(1.5);">🐻</span>
                         </button>
-                    </div>
-                </div>
-
-                <!-- Fur Color -->
-                <div class="config-section">
-                    <h3>Fellfarbe</h3>
-                    <div class="color-group">
-                        <button class="color-btn active" data-color="brown" style="background-color: #8B4513;" title="Braun"></button>
-                        <button class="color-btn" data-color="beige" style="background-color: #D2B48C;" title="Beige"></button>
-                        <button class="color-btn" data-color="white" style="background-color: #F5F5DC;" title="Weiss"></button>
-                        <button class="color-btn" data-color="pink" style="background-color: #FFB6C1;" title="Rosa"></button>
+                        <button class="bear-type-btn" data-skin="blue" title="Blue Bear">
+                            <span class="bear-icon" style="filter: hue-rotate(180deg) saturate(1.2);">🐻</span>
+                        </button>
                     </div>
                 </div>
 
                 <!-- Eye Color -->
                 <div class="config-section">
-                    <h3>Augenfarbe</h3>
+                    <h3>Pick Eye Color</h3>
                     <div class="color-group">
-                        <button class="color-btn active" data-eye="black" style="background-color: #000000;" title="Schwarz"></button>
-                        <button class="color-btn" data-eye="blue" style="background-color: #4169E1;" title="Blau"></button>
-                        <button class="color-btn" data-eye="brown" style="background-color: #654321;" title="Braun"></button>
-                        <button class="color-btn" data-eye="green" style="background-color: #228B22;" title="Grün"></button>
+                        <button class="color-btn active" data-part="eyes" data-color="0x000000" style="background-color: #000000;" title="Black"></button>
+                        <button class="color-btn" data-part="eyes" data-color="0x4169E1" style="background-color: #4169E1;" title="Blue"></button>
+                        <button class="color-btn" data-part="eyes" data-color="0x654321" style="background-color: #654321;" title="Brown"></button>
+                        <button class="color-btn" data-part="eyes" data-color="0x228B22" style="background-color: #228B22;" title="Green"></button>
+                    </div>
+                </div>
+
+                <!-- Nose Color -->
+                <div class="config-section">
+                    <h3>Pick Nose Color</h3>
+                    <div class="color-group">
+                        <button class="color-btn active" data-part="nose" data-color="0x000000" style="background-color: #000000;" title="Black"></button>
+                        <button class="color-btn" data-part="nose" data-color="0xFF69B4" style="background-color: #FF69B4;" title="Pink"></button>
+                        <button class="color-btn" data-part="nose" data-color="0x8B4513" style="background-color: #8B4513;" title="Brown"></button>
+                        <button class="color-btn" data-part="nose" data-color="0xFFB6C1" style="background-color: #FFB6C1;" title="Light Pink"></button>
                     </div>
                 </div>
 
                 <!-- Accessories -->
                 <div class="config-section">
-                    <h3>Zubehör</h3>
-                    <div class="accessory-group">
-                        <label class="accessory-item">
-                            <input type="checkbox" id="acc-hat" data-accessory="hat">
-                            <span class="accessory-label">
-                                <span class="icon">🎩</span>
-                                <span>Hut</span>
-                            </span>
+                    <h3>Choose Accessories</h3>
+                    <div class="hat-options">
+                        <label class="accessory-round-btn">
+                            <input type="radio" name="hat" value="none" checked>
+                            <span class="accessory-icon">❌</span>
+                            <span class="accessory-name">No Hat</span>
                         </label>
-                        <label class="accessory-item">
-                            <input type="checkbox" id="acc-bow" data-accessory="bow">
-                            <span class="accessory-label">
-                                <span class="icon">🎀</span>
-                                <span>Schleife</span>
-                            </span>
+                        <label class="accessory-round-btn">
+                            <input type="radio" name="hat" value="hat">
+                            <span class="accessory-icon">🎩</span>
+                            <span class="accessory-name">Top Hat</span>
                         </label>
-                        <label class="accessory-item">
+                        <label class="accessory-round-btn">
+                            <input type="radio" name="hat" value="beanie">
+                            <span class="accessory-icon">🧢</span>
+                            <span class="accessory-name">Beanie</span>
+                        </label>
+                        <label class="accessory-round-btn">
                             <input type="checkbox" id="acc-scarf" data-accessory="scarf">
-                            <span class="accessory-label">
-                                <span class="icon">🧣</span>
-                                <span>Schal</span>
-                            </span>
+                            <span class="accessory-icon">🧣</span>
+                            <span class="accessory-name">Scarf</span>
                         </label>
+
+                    </div>
+
+                    <!-- Accessory Color Picker (nur wenn Accessoire ausgewählt) -->
+                    <div id="accessory-color-section" style="display: none; margin-top: 20px;">
+                        <h4 style="font-size: 0.95rem; color: #666; margin-bottom: 12px;">Pick Accessory Color</h4>
+                        <div class="color-group">
+                            <button class="color-btn active" data-acc-color="0xFFFFFF" style="background-color: #FFFFFF;" title="White"></button>
+                            <button class="color-btn" data-acc-color="0x000000" style="background-color: #000000;" title="Black"></button>
+                            <button class="color-btn" data-acc-color="0xFF0000" style="background-color: #FF0000;" title="Red"></button>
+                            <button class="color-btn" data-acc-color="0x4169E1" style="background-color: #4169E1;" title="Blue"></button>
+                            <button class="color-btn" data-acc-color="0xFF69B4" style="background-color: #FF69B4;" title="Pink"></button>
+                            <button class="color-btn" data-acc-color="0x32CD32" style="background-color: #32CD32;" title="Green"></button>
+                            <button class="color-btn" data-acc-color="0xFFD700" style="background-color: #FFD700;" title="Gold"></button>
+                            <button class="color-btn" data-acc-color="0x800080" style="background-color: #800080;" title="Purple"></button>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Reset Button -->
                 <div class="config-section">
-                    <button id="resetAll" class="reset-btn">Zurücksetzen</button>
+                    <button id="resetAll" class="reset-btn">Reset All</button>
                 </div>
             </div>
         </div>
@@ -118,5 +134,6 @@
     }
     </script>
     <script type="module" src="script.js"></script>
+
 </body>
 </html>

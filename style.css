@@ -114,7 +114,6 @@ body {
     min-height: 0;
 }
 
-/* Custom Scrollbar */
 .config-panel::-webkit-scrollbar {
     width: 8px;
 }
@@ -147,51 +146,101 @@ body {
     font-size: 1.2rem;
 }
 
-/* Option Buttons */
-.option-group {
+/* Bear Type Buttons (rund mit Emojis) */
+.bear-type-group {
     display: flex;
-    gap: 10px;
+    gap: 15px;
+    justify-content: center;
     flex-wrap: wrap;
 }
 
-.option-btn {
-    flex: 1;
-    min-width: 100px;
-    padding: 15px;
+.bear-type-btn {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
     border: 3px solid #FFE5E5;
-    border-radius: 15px;
     background: white;
     cursor: pointer;
     transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.bear-icon {
+    font-size: 2.5rem;
+}
+
+.bear-type-btn:hover {
+    border-color: #FFB6C1;
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(255, 182, 193, 0.4);
+}
+
+.bear-type-btn.active {
+    border-color: #FF6B9D;
+    box-shadow: 0 0 0 4px rgba(255, 107, 157, 0.2);
+    background: #FFF5F7;
+}
+
+/* Accessory Round Buttons */
+.hat-options {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.accessory-round-btn {
+    cursor: pointer;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 8px;
 }
 
-.option-btn .icon {
-    font-size: 2rem;
+.accessory-round-btn input {
+    display: none;
 }
 
-.option-btn .label {
-    font-size: 0.9rem;
+.accessory-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 3px solid #FFE5E5;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.accessory-name {
+    font-size: 0.85rem;
     color: #666;
 }
 
-.option-btn:hover {
+.accessory-round-btn:hover .accessory-icon {
     border-color: #FFB6C1;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(255, 182, 193, 0.3);
+    transform: scale(1.05);
 }
 
-.option-btn.active {
+.accessory-round-btn input:checked ~ .accessory-icon {
     border-color: #FF6B9D;
     background: #FFF5F7;
+    box-shadow: 0 0 0 3px rgba(255, 107, 157, 0.2);
 }
 
-.option-btn.active .label {
+.accessory-round-btn input:checked ~ .accessory-name {
     color: #FF6B9D;
     font-weight: bold;
+}
+
+.accessory-toggle {
+    display: flex;
+    flex-direction: column;
 }
 
 /* Color Buttons */
@@ -219,51 +268,6 @@ body {
 .color-btn.active {
     border-color: #FF6B9D;
     box-shadow: 0 0 0 3px rgba(255, 107, 157, 0.3);
-}
-
-/* Accessories */
-.accessory-group {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.accessory-item {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-}
-
-.accessory-item input[type="checkbox"] {
-    display: none;
-}
-
-.accessory-label {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 15px;
-    border: 2px solid #FFE5E5;
-    border-radius: 12px;
-    background: white;
-    width: 100%;
-    transition: all 0.3s ease;
-}
-
-.accessory-label .icon {
-    font-size: 1.5rem;
-}
-
-.accessory-item:hover .accessory-label {
-    border-color: #FFB6C1;
-    transform: translateX(5px);
-}
-
-.accessory-item input[type="checkbox"]:checked + .accessory-label {
-    border-color: #FF6B9D;
-    background: #FFF5F7;
-    font-weight: bold;
-    color: #FF6B9D;
 }
 
 /* Reset Button */
@@ -301,18 +305,14 @@ body {
 
 /* Animations */
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 @keyframes slideDown {
     from {
         opacity: 0;
-        transform: translateY(-30px);
+        transform: translateY(-10px);
     }
     to {
         opacity: 1;
@@ -347,6 +347,10 @@ body {
         order: 2;
         max-height: none;
     }
+
+    .bear-type-group {
+        gap: 12px;
+    }
 }
 
 @media (max-width: 768px) {
@@ -356,202 +360,59 @@ body {
     
     .container {
         padding: 10px;
-        height: 100vh;
     }
     
     .header h1 {
         font-size: 1.8rem;
-        margin-bottom: 5px;
     }
     
     .subtitle {
         font-size: 0.95rem;
     }
-    
-    .header {
-        margin-bottom: 15px;
+
+    .bear-type-btn {
+        width: 60px;
+        height: 60px;
     }
-    
-    .main-content {
-        gap: 15px;
+
+    .bear-icon {
+        font-size: 2rem;
     }
-    
-    .viewer-section {
-        min-height: 45vh;
+
+    .accessory-icon {
+        width: 55px;
+        height: 55px;
+        font-size: 1.8rem;
     }
-    
-    .viewer-container {
-        padding: 15px;
-    }
-    
-    .config-panel {
-        padding: 20px;
-    }
-    
-    .config-section {
-        margin-bottom: 20px;
-        padding-bottom: 15px;
-    }
-    
-    .config-section h3 {
-        font-size: 1.05rem;
-        margin-bottom: 12px;
-    }
-    
-    .option-btn {
-        min-width: 70px;
-        padding: 10px 8px;
-    }
-    
-    .option-btn .icon {
-        font-size: 1.5rem;
-    }
-    
-    .option-btn .label {
-        font-size: 0.85rem;
-    }
-    
+
     .color-btn {
         width: 45px;
         height: 45px;
-    }
-    
-    .icon-btn {
-        width: 45px;
-        height: 45px;
-        font-size: 1.3rem;
-    }
-    
-    .viewer-controls {
-        bottom: 20px;
-        right: 20px;
-    }
-    
-    .footer {
-        margin-top: 15px;
-        font-size: 0.85rem;
     }
 }
 
 @media (max-width: 480px) {
-    .container {
-        padding: 8px;
-    }
-    
     .header h1 {
         font-size: 1.5rem;
     }
     
-    .subtitle {
-        font-size: 0.85rem;
+    .bear-type-btn {
+        width: 55px;
+        height: 55px;
     }
-    
-    .header {
-        margin-bottom: 10px;
+
+    .bear-icon {
+        font-size: 1.8rem;
     }
-    
-    .main-content {
-        gap: 10px;
+
+    .accessory-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.6rem;
     }
-    
-    .viewer-section {
-        min-height: 40vh;
-    }
-    
-    .viewer-container {
-        padding: 10px;
-    }
-    
-    .config-panel {
-        padding: 15px;
-    }
-    
-    .config-section h3 {
-        font-size: 1rem;
-    }
-    
-    .option-group {
-        gap: 8px;
-    }
-    
-    .option-btn {
-        min-width: 60px;
-        padding: 8px 5px;
-    }
-    
-    .option-btn .icon {
-        font-size: 1.3rem;
-    }
-    
-    .option-btn .label {
-        font-size: 0.8rem;
-    }
-    
+
     .color-btn {
         width: 40px;
         height: 40px;
-    }
-    
-    .color-group {
-        gap: 8px;
-    }
-    
-    .accessory-label {
-        padding: 10px 12px;
-        gap: 8px;
-        font-size: 0.9rem;
-    }
-    
-    .accessory-label .icon {
-        font-size: 1.3rem;
-    }
-    
-    .reset-btn {
-        padding: 12px;
-        font-size: 0.95rem;
-    }
-    
-    .footer {
-        margin-top: 10px;
-        font-size: 0.75rem;
-    }
-    
-    .footer p {
-        line-height: 1.4;
-    }
-    
-    .icon-btn {
-        width: 40px;
-        height: 40px;
-        font-size: 1.2rem;
-    }
-    
-    .viewer-controls {
-        bottom: 15px;
-        right: 15px;
-    }
-}
-
-/* Touch Optimierung */
-@media (hover: none) and (pointer: coarse) {
-    .option-btn,
-    .color-btn,
-    .icon-btn,
-    .reset-btn,
-    .accessory-label {
-        /* Größere Touch-Targets für mobile */
-        min-height: 44px;
-    }
-    
-    .option-btn:active,
-    .color-btn:active,
-    .icon-btn:active,
-    .reset-btn:active {
-        transform: scale(0.95);
-    }
-    
-    /* Besseres Scrolling auf Touch */
-    .config-panel {
-        -webkit-overflow-scrolling: touch;
     }
 }
